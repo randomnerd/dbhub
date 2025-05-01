@@ -35,7 +35,11 @@ class MySQLDSNParser implements DSNParser {
       // Handle query parameters
       url.searchParams.forEach((value, key) => {
         if (key === "ssl") {
-          config.ssl = value === "true" ? {} : undefined;
+          config.ssl = value === "true"
+            ? {}
+            : value.startsWith('{')
+              ? JSON.parse(decodeURIComponent(value))
+              : undefined;
         }
         // Add other parameters as needed
       });
